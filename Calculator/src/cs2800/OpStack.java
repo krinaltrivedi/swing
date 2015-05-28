@@ -1,0 +1,65 @@
+package cs2800;
+/**
+ *  This class is a facade to the Stack class. This only takes
+ * Symbols, rather than an Entry. It prevents the input
+ * of an entry that we don't require. There is a field called 
+ * numStack which is the Stack. It also contains push and pop 
+ * methods which push and pop float values onto the stack. In
+ * addition, there is a method isEmpty() which checks if the stack
+ * is empty.
+ * @author Krinal
+ *
+ */
+public class OpStack {
+
+	/**
+	 * Stack which holds the symbols when evaluating infix notation
+	 */
+	private Stack numStack;
+	
+	/**
+	 * Initialises stack
+	 */
+	public OpStack() {
+		numStack = new Stack();
+	}
+
+	/**
+	 * Pushes a symbol onto the stack
+	 * @param symbol the symbol to insert
+	 */
+	public final void push(final Symbol symbol) {
+		numStack.push(new Entry(symbol));
+	}
+
+	/**
+	 * Returns and removes the topmost value on the stack
+	 * @return the top most value on the stack.
+	 */
+	public final Symbol pop() {
+		if (isEmpty()) {
+			return null;
+		}
+		return numStack.pop().getSymbol();
+	}
+
+	/**
+	 * Checks if the stack is empty or not.
+	 * @return true if the stack is empty, otherwise returns false.
+	 */
+	public final boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return numStack.size() == 0;
+	}
+
+	public final Symbol top() {
+		// TODO Auto-generated method stub
+		return numStack.top().getSymbol();
+	}
+
+	public final int size() {
+		// TODO Auto-generated method stub
+		return numStack.size();
+	}
+
+}

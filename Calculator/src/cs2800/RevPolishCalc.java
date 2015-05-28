@@ -1,0 +1,128 @@
+package cs2800;
+/**
+ * This class will calculate the sum of a Reverse Polish Expression.
+ * It contains one method, evaluate(String) which will calculate an
+ * output, provided the input is in the correct format. The evaluate(String)
+ * method is implemented from the Calculator interface. 
+ * @author Krinal
+ *
+ */
+public class RevPolishCalc implements Calculator {
+
+	/**
+	 * Stack of type NumStack to hold the numbers of an expression.
+	 */
+	private NumStack values;
+	
+	/**
+	 * Constructor to initialise the stack.
+	 */
+	public RevPolishCalc() {
+		values = new NumStack();
+	}
+
+	/**
+	 * This method will calculate the value of a Reverse Polish expression.
+	 * It will loop through the length of the string, and creates a substring
+	 * of the parameter 'what' until there is a space. If this substring is an
+	 * operator, then it will pop two values off the stack, and the relevant 
+	 * calculate is performed. The result is then pushed back onto the stack. 
+	 * This process is repeated until the end of the string. If invalid 
+	 * expressions are found, then an InvalidExpression exception is thrown. 
+	 */
+	@Override
+	public final float evaluate(final String what) throws BadException, 
+	InvalidExpression {
+		// TODO Auto-generated method stub
+		
+		float num1 = 0; //holds first value that is popped
+		float num2 = 0; //holds second value that is popped
+		String temp = null; //holds the substring
+		int counter = 0; //variable to mark the start index of a string
+		int space = 0; //variable to mark the index where the is a space.
+		
+		//loops until the end of the string is reached.
+		while (counter != what.length()) {
+			space = what.indexOf(' ', counter);
+			temp = what.substring(counter, space);
+			
+			//if substring is a '+' then add
+			//if substring is a '-' then subtract
+			//if substring is a '*' then multiply
+			//if substring is a '/' then divide.
+			if (temp.equals("+")) {
+				//if stack is empty, but + is encountered, throw 
+				//InvalidExpression exception
+				if (values.isEmpty()) {
+					throw new InvalidExpression();
+				}
+				num1 = values.pop();
+				num2 = values.pop();
+				values.push(num1 + num2); 
+			} else if (temp.equals("-")) {
+				//if stack is empty, but + is encountered, throw 
+				//InvalidExpression exception
+				if (values.isEmpty()) {
+					throw new InvalidExpression();
+				}
+				num1 = values.pop();
+				System.out.println(num1);
+				num2 = values.pop();
+				System.out.println(num2);
+				if (num2 == 0) {
+					throw new InvalidExpression();
+				}
+				values.push(num2 - num1);
+			} else if (temp.equals("*")) {
+				//if stack is empty, but + is encountered, throw 
+				//InvalidExpression exception
+				if (values.isEmpty()) {
+					throw new InvalidExpression();
+				}
+				num1 = values.pop();
+				num2 = values.pop();
+				values.push(num2 * num1);
+			} else if (temp.equals("/")) {
+				//if stack is empty, but + is encountered, throw 
+				//InvalidExpression exception
+				if (values.isEmpty()) {
+					throw new InvalidExpression();
+				}
+				num1 = values.pop();
+				num2 = values.pop();
+		
+				values.push(num2 / num1);
+			} else {
+				//Expression must be a number. If not, throw a 
+				//NumberFormatException.
+				try {
+					values.push(Float.parseFloat(temp));
+				} catch (NumberFormatException e) {
+					e.getMessage();
+				}
+				
+			}
+			
+			counter = space + 1;
+		}
+		System.out.println("size of stack: " + values.size());
+		//If stack has more than 1 item, then the input must be wrong.
+		//Therefore throw InvalidExpression exception
+		if ((values.size() > 1)) {
+			resetStack();
+			throw new InvalidExpression();
+		}
+		//If stack is empty then throw InvalidExpression exception
+		if (values.isEmpty()) {
+			throw new InvalidExpression();
+		}
+		return values.pop();
+	}
+	
+	private void resetStack() throws BadException {
+		// TODO Auto-generated method stub
+		while (!values.isEmpty()) {
+			values.pop();
+		}
+	}
+}
